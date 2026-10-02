@@ -9,6 +9,9 @@ interface MovieModalProps {
 }
 
 export default function MovieModal({ movie, onClose }: MovieModalProps) {
+  // TMDB може повернути backdrop_path: null — тоді показуємо постер
+  const imagePath = movie.backdrop_path || movie.poster_path;
+
   const handleBackdropClick = (event: React.MouseEvent<HTMLDivElement>) => {
     if (event.target === event.currentTarget) {
       onClose();
@@ -46,11 +49,13 @@ export default function MovieModal({ movie, onClose }: MovieModalProps) {
         >
           &times;
         </button>
-        <img
-          src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
-          alt={movie.title}
-          className={css.image}
-        />
+        {imagePath && (
+          <img
+            src={`https://image.tmdb.org/t/p/original${imagePath}`}
+            alt={movie.title}
+            className={css.image}
+          />
+        )}
         <div className={css.content}>
           <h2>{movie.title}</h2>
           <p>{movie.overview}</p>
